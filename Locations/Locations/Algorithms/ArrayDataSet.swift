@@ -15,6 +15,6 @@ final class ArrayDataSet: SearchableDataSet {
     }
 
     func search(prefix: String) -> [City] {
-        cities.filter { $0.name.lowercased().hasPrefix(prefix) }
+        cities.filter { $0.name.lowercased().hasPrefix(prefix.lowercased()) }
     }
 }

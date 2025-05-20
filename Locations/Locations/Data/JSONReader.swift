@@ -8,18 +8,25 @@
 import Foundation
 
 final class JSONReader {
-    func readJSONFromBundle<T: Decodable>(_ fileName: String, type: T.Type) -> T? {
-        guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
-            print("File not found: \(fileName).json")
-            return nil
-        }
+    enum Errors: Error {
+        case fileNotFound
+        case unableToDecode
+    }
 
-        do {
-            let data = try Data(contentsOf: url)
-            return try JSONDecoder().decode(T.self, from: data)
-        } catch {
-            print("Unable to decode file contents.", error)
-            return nil
+    func readFromMainBundle<T: Decodable>(_ fileName: String, type: T.Type) async throws -> T {
+        return try await withCheckedThrowingContinuation { continuation in
+            guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
+                continuation.resume(throwing: Errors.fileNotFound)
+                return
+            }
+
+            do {
+                let data = try Data(contentsOf: url)
+                let decodedData = try JSONDecoder().decode(T.self, from: data)
+                continuation.resume(returning: decodedData)
+            } catch {
+                continuation.resume(throwing: Errors.unableToDecode)
+            }
         }
     }
 }

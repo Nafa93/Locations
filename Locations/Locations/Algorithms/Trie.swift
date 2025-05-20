@@ -9,7 +9,6 @@ import Foundation
 
 class TrieNode {
     var children: [Character: TrieNode] = [:]
-    var isEndOfWord = false
     var cities: [City] = []
 }
 
@@ -24,10 +23,12 @@ class Trie: SearchableDataSet {
             if node.children[char] == nil {
                 node.children[char] = TrieNode()
             }
-            node = node.children[char]!
+
+            if let children = node.children[char] {
+                node = children
+            }
         }
 
-        node.isEndOfWord = true
         node.cities.append(city)
     }
 
@@ -35,9 +36,9 @@ class Trie: SearchableDataSet {
         guard !prefix.isEmpty else { return [] }
 
         var node = root
-        let lowerPrefix = prefix.lowercased()
+        let lowercasedPrefix = prefix.lowercased()
 
-        for char in lowerPrefix {
+        for char in lowercasedPrefix {
             guard let next = node.children[char] else { return [] }
             node = next
         }
