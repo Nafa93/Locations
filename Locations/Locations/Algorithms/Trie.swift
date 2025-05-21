@@ -32,18 +32,26 @@ class Trie: SearchableDataSet {
         node.cities.append(city)
     }
 
-    func search(prefix: String) -> [City] {
-        guard !prefix.isEmpty else { return [] }
+    func search(prefix: String) async -> [City]  {
+        await withCheckedContinuation { continuation in
+            guard !prefix.isEmpty else {
+                continuation.resume(returning: [])
+                return
+            }
 
-        var node = root
-        let lowercasedPrefix = prefix.lowercased()
+            var node = root
+            let lowercasedPrefix = prefix.lowercased()
 
-        for char in lowercasedPrefix {
-            guard let next = node.children[char] else { return [] }
-            node = next
+            for char in lowercasedPrefix {
+                guard let next = node.children[char] else {
+                    continuation.resume(returning: [])
+                    return
+                }
+                node = next
+            }
+
+            continuation.resume(returning: collect(from: node))
         }
-
-        return collect(from: node)
     }
 
     private func collect(from node: TrieNode?) -> [City] {

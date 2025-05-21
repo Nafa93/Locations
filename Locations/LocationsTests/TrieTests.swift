@@ -19,7 +19,7 @@ final class TrieTests: XCTestCase {
         sut = nil
     }
 
-    func test_A_returnsFourElements() throws {
+    func test_A_returnsFourElements() async throws {
         // Given
         let cities = mockCities()
         let prefix = "A"
@@ -27,7 +27,7 @@ final class TrieTests: XCTestCase {
         cities.forEach { sut.insert($0) }
 
         // When
-        let result = sut.search(prefix: prefix)
+        let result = await sut.search(prefix: prefix)
 
         // Then
         XCTAssertEqual(result.count, 4)
@@ -37,7 +37,7 @@ final class TrieTests: XCTestCase {
         XCTAssertTrue(cities.contains(where: { $0.name == "Arizona" } ))
     }
 
-    func test_s_returnsOneElement() throws {
+    func test_s_returnsOneElement() async throws {
         // Given
         let cities = mockCities()
         let prefix = "s"
@@ -45,14 +45,14 @@ final class TrieTests: XCTestCase {
         cities.forEach { sut.insert($0) }
 
         // When
-        let result = sut.search(prefix: prefix)
+        let result = await sut.search(prefix: prefix)
 
         // Then
         XCTAssertEqual(result.count, 1)
         XCTAssertTrue(cities.contains(where: { $0.name == "Sydney" } ))
     }
 
-    func test_Al_returnsTwoElements() throws {
+    func test_Al_returnsTwoElements() async throws {
         // Given
         let cities = mockCities()
         let prefix = "Al"
@@ -60,7 +60,7 @@ final class TrieTests: XCTestCase {
         cities.forEach { sut.insert($0) }
 
         // When
-        let result = sut.search(prefix: prefix)
+        let result = await sut.search(prefix: prefix)
 
         // Then
         XCTAssertEqual(result.count, 2)
@@ -68,7 +68,7 @@ final class TrieTests: XCTestCase {
         XCTAssertTrue(cities.contains(where: { $0.name == "Albuquerque" } ))
     }
 
-    func test_Alb_returnsOneElement() throws {
+    func test_Alb_returnsOneElement() async throws {
         // Given
         let cities = mockCities()
         let prefix = "Alb"
@@ -76,7 +76,7 @@ final class TrieTests: XCTestCase {
         cities.forEach { sut.insert($0) }
 
         // When
-        let result = sut.search(prefix: prefix)
+        let result = await sut.search(prefix: prefix)
 
         // Then
         XCTAssertEqual(result.count, 1)

@@ -28,7 +28,11 @@ final class Benchmarker {
             }
 
             benchmark(label: "Searching in \(type(of: searchableDataSet))", iterations: iterations) {
-                print("Found \(searchableDataSet.search(prefix: prefix).count) words with \(type(of: searchableDataSet))")
+                Task {
+                    let results = await searchableDataSet.search(prefix: prefix)
+
+                    print("Found \(results.count) words with \(type(of: searchableDataSet))")
+                }
             }
         }
     }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct City: Codable {
+struct City: Codable, Equatable {
     let id: Int
     let country: String
     let name: String
@@ -18,15 +18,5 @@ struct City: Codable {
         case country
         case name
         case coordinate = "coord"
-    }
-}
-
-struct Coordinate: Codable {
-    let longitude: Double
-    let latitude: Double
-
-    enum CodingKeys: String, CodingKey {
-        case longitude = "lon"
-        case latitude = "lat"
     }
 }

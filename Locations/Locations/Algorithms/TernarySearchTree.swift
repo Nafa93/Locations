@@ -45,14 +45,26 @@ class TernarySearchTree: SearchableDataSet {
         return currentNode
     }
 
-    func search(prefix: String) -> [City] {
-        guard !prefix.isEmpty else { return [] }
-        let name = prefix.lowercased()
-        guard let node = findNode(root, name, index: 0) else { return [] }
+    func search(prefix: String) async -> [City] {
+        await withCheckedContinuation { continuation in
+            guard !prefix.isEmpty else {
+                continuation.resume(returning: [])
+                return
+            }
 
-        var result = node.cities
-        collect(node.middle, result: &result)
-        return result
+            let name = prefix.lowercased()
+
+            guard let node = findNode(root, name, index: 0) else {
+                continuation.resume(returning: [])
+                return
+            }
+
+            var result = node.cities
+
+            collect(node.middle, result: &result)
+
+            continuation.resume(returning: result)
+        }
     }
 
     private func findNode(_ node: TSTNode?, _ name: String, index: Int) -> TSTNode? {

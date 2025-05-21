@@ -14,7 +14,10 @@ final class ArrayDataSet: SearchableDataSet {
         cities.append(city)
     }
 
-    func search(prefix: String) -> [City] {
-        cities.filter { $0.name.lowercased().hasPrefix(prefix.lowercased()) }
+    func search(prefix: String) async -> [City] {
+        await withCheckedContinuation { continuation in
+            let result = cities.filter { $0.name.lowercased().hasPrefix(prefix.lowercased()) }
+            continuation.resume(returning: result)
+        }
     }
 }

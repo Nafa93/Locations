@@ -25,7 +25,7 @@ final class JSONReaderTests: XCTestCase {
 
         do {
             //When
-            let dataSet = try await sut.readFromMainBundle(fileName, type: [City].self)
+            _ = try await sut.readFromMainBundle(fileName, type: [City].self)
         } catch let error as JSONReader.Errors {
             // Then
             XCTAssertEqual(error, .fileNotFound)
@@ -40,7 +40,7 @@ final class JSONReaderTests: XCTestCase {
 
         do {
             // When
-            let dataSet = try await sut.readFromMainBundle(fileName, type: [String].self)
+            _ = try await sut.readFromMainBundle(fileName, type: [String].self)
         } catch let error as JSONReader.Errors {
             // Then
             XCTAssertEqual(error, .unableToDecode)
