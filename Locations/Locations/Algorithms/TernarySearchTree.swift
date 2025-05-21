@@ -20,7 +20,11 @@ class TSTNode {
 class TernarySearchTree: SearchableDataSet {
     private var root: TSTNode?
 
-    func insert(_ city: City) {
+    func insert(_ cities: [City]) {
+        cities.forEach { insert($0) }
+    }
+
+    private func insert(_ city: City) {
         guard !city.name.isEmpty else { return }
         root = insert(city, at: root, index: 0)
     }

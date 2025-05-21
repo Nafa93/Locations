@@ -24,7 +24,7 @@ final class Benchmarker {
 
         for searchableDataSet in searchableDataSets {
             benchmark(label: "Adding to \(type(of: searchableDataSet))") {
-                dataSet.forEach { searchableDataSet.insert($0) }
+                searchableDataSet.insert(dataSet)
             }
 
             benchmark(label: "Searching in \(type(of: searchableDataSet))", iterations: iterations) {

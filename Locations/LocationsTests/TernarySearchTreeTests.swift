@@ -24,7 +24,7 @@ final class TernarySearchTreeTests: XCTestCase {
         let cities = mockCities()
         let prefix = "A"
 
-        cities.forEach { sut.insert($0) }
+        sut.insert(cities)
 
         // When
         let result = await sut.search(prefix: prefix)
@@ -42,7 +42,7 @@ final class TernarySearchTreeTests: XCTestCase {
         let cities = mockCities()
         let prefix = "s"
 
-        cities.forEach { sut.insert($0) }
+        sut.insert(cities)
 
         // When
         let result = await sut.search(prefix: prefix)
@@ -57,7 +57,7 @@ final class TernarySearchTreeTests: XCTestCase {
         let cities = mockCities()
         let prefix = "Al"
 
-        cities.forEach { sut.insert($0) }
+        sut.insert(cities)
 
         // When
         let result = await sut.search(prefix: prefix)
@@ -73,7 +73,7 @@ final class TernarySearchTreeTests: XCTestCase {
         let cities = mockCities()
         let prefix = "Alb"
 
-        cities.forEach { sut.insert($0) }
+        sut.insert(cities)
 
         // When
         let result = await sut.search(prefix: prefix)

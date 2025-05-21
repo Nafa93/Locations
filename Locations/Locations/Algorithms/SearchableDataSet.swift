@@ -8,6 +8,6 @@
 import Foundation
 
 protocol SearchableDataSet {
-    func insert(_ city: City)
+    func insert(_ cities: [City])
     func search(prefix: String) async -> [City]
 }

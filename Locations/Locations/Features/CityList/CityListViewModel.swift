@@ -9,33 +9,56 @@ import Foundation
 
 @Observable final class CityListViewModel {
     private let cityRepository: CityRepository
-    private let searchableDataSet: SearchableDataSet
-
-    var allCities: [City] = []
-    var displayedCities: [City] = []
+    private let favoritesRepository: FavoritesRepository
+    private var allCities: [City] = []
+    private var favoritesCities: Set<City> = []
+    var displayableCities: [City] = []
     var error: Errors?
+    var isFavoritesOn = false
 
-    init(cityRepository: CityRepository, searchableDataSet: SearchableDataSet) {
+    init(
+        cityRepository: CityRepository,
+        favoritesRepository: FavoritesRepository
+    ) {
         self.cityRepository = cityRepository
-        self.searchableDataSet = searchableDataSet
+        self.favoritesRepository = favoritesRepository
     }
 
     @MainActor
     func loadCities() async {
         do {
-            allCities = sortCities(try await self.cityRepository.getAll())
-            displayedCities = allCities
-
-            allCities.forEach { searchableDataSet.insert($0) }
+            let sortedCities = sortCities(try await self.cityRepository.getAll())
+            allCities = sortedCities
+            displayableCities = sortedCities
         } catch {
             self.error = .failedToLoad
         }
     }
 
     @MainActor
+    func loadFavorites() async {
+        favoritesCities = Set(await favoritesRepository.getAll())
+    }
+
+    @MainActor
     func searchPrefix(_ prefix: String) async {
-        let result = await searchableDataSet.search(prefix: prefix)
-        displayedCities = sortCities(result)
+        let sortedCities = sortCities(await cityRepository.search(prefix: prefix))
+
+        if isFavoritesOn {
+            let filteredFavorites = sortedCities.filter { favoritesCities.contains($0) }
+            displayableCities = filteredFavorites
+        } else {
+            displayableCities = sortedCities
+        }
+    }
+
+    @MainActor
+    func toggleFavorites() {
+        isFavoritesOn.toggle()
+    }
+
+    func isFavorite(_ city: City) -> Bool {
+        return favoritesCities.contains(city)
     }
 
     private func sortCities(_ cities: [City]) -> [City] {

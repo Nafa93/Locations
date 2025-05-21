@@ -15,7 +15,11 @@ class TrieNode {
 class Trie: SearchableDataSet {
     private let root = TrieNode()
 
-    func insert(_ city: City) {
+    func insert(_ cities: [City]) {
+        cities.forEach { insert($0) }
+    }
+
+    private func insert(_ city: City) {
         var node = root
         let name = city.name.lowercased()
 
