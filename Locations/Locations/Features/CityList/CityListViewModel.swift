@@ -15,6 +15,7 @@ import Foundation
     var displayableCities: [City] = []
     var error: Errors?
     var isFavoritesOn = false
+    var currentPrefix = ""
 
     init(
         cityRepository: CityRepository,
@@ -42,6 +43,8 @@ import Foundation
 
     @MainActor
     func searchPrefix(_ prefix: String) async {
+        currentPrefix = prefix
+
         let sortedCities = sortCities(await cityRepository.search(prefix: prefix))
 
         if isFavoritesOn {
@@ -53,8 +56,22 @@ import Foundation
     }
 
     @MainActor
-    func toggleFavorites() {
+    func toggleFavorites() async {
         isFavoritesOn.toggle()
+
+        await searchPrefix(currentPrefix)
+    }
+
+    @MainActor
+    func addToFavorites(_ city: City) async {
+        favoritesCities.insert(city)
+        await favoritesRepository.addCity(city)
+    }
+
+    @MainActor
+    func removeFromFavorites(_ city: City) async {
+        favoritesCities.remove(city)
+        await favoritesRepository.removeCity(city)
     }
 
     func isFavorite(_ city: City) -> Bool {

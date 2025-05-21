@@ -56,6 +56,17 @@ final class CityListViewModelTests: XCTestCase {
         XCTAssertEqual(sut.error?.localizedDescription, "Failed to load cities")
     }
 
+    func test_whenNewPrefixIsTyped_currentPrefixShouldBeUpdated() async {
+        // Given
+        let prefix = "Something"
+
+        // When
+        await sut.searchPrefix(prefix)
+
+        // Then
+        XCTAssertEqual(sut.currentPrefix, prefix)
+    }
+
     func test_searchPrefix_returnsCitiesOrderedAlphabeticallyByName_andCountry() async throws {
         // Given
         let cities = [
@@ -204,5 +215,123 @@ final class CityListViewModelTests: XCTestCase {
         // Then
         XCTAssertFalse(sut.displayableCities.isEmpty)
         XCTAssertEqual(sut.displayableCities.count, 4)
+    }
+
+    func test_whenFavoritesTurnsOn_searchShouldBeDoneRepeatedWithFilter() async {
+        // Given
+        let prefix = "A"
+
+        let favoriteCities = [
+            City(id: 0, country: "AR", name: "A city", coordinate: Coordinate(longitude: 0.0, latitude: 0.0)),
+            City(id: 1, country: "AR", name: "Another City", coordinate: Coordinate(longitude: 0.0, latitude: 0.0))
+        ]
+
+        let nonFavoriteCities = [
+            City(id: 2, country: "AR", name: "A single city", coordinate: Coordinate(longitude: 0.0, latitude: 0.0)),
+            City(id: 3, country: "AR", name: "Another single city", coordinate: Coordinate(longitude: 0.0, latitude: 0.0))
+        ]
+
+        cityRepository.cities = favoriteCities + nonFavoriteCities
+        favoritesRepository.favoriteCities = favoriteCities
+
+        sut.isFavoritesOn = false
+
+        // When
+        await sut.loadCities()
+        await sut.loadFavorites()
+        await sut.searchPrefix(prefix)
+
+        // Then
+        XCTAssertFalse(sut.displayableCities.isEmpty)
+        XCTAssertEqual(sut.displayableCities.count, 4)
+
+        // When
+        await sut.toggleFavorites()
+
+        // Then
+        XCTAssertFalse(sut.displayableCities.isEmpty)
+        XCTAssertEqual(sut.displayableCities.count, 2)
+        XCTAssertEqual(sut.displayableCities[0], favoriteCities[0])
+        XCTAssertEqual(sut.displayableCities[1], favoriteCities[1])
+    }
+
+    func test_whenFavoritesTurnsOff_searchShouldBeDoneRepeatedWithoutFilter() async {
+        // Given
+        let prefix = "A"
+
+        let favoriteCities = [
+            City(id: 0, country: "AR", name: "A city", coordinate: Coordinate(longitude: 0.0, latitude: 0.0)),
+            City(id: 1, country: "AR", name: "Another City", coordinate: Coordinate(longitude: 0.0, latitude: 0.0))
+        ]
+
+        let nonFavoriteCities = [
+            City(id: 2, country: "AR", name: "A single city", coordinate: Coordinate(longitude: 0.0, latitude: 0.0)),
+            City(id: 3, country: "AR", name: "Another single city", coordinate: Coordinate(longitude: 0.0, latitude: 0.0))
+        ]
+
+        cityRepository.cities = favoriteCities + nonFavoriteCities
+        favoritesRepository.favoriteCities = favoriteCities
+
+        sut.isFavoritesOn = true
+
+        // When
+        await sut.loadCities()
+        await sut.loadFavorites()
+        await sut.searchPrefix(prefix)
+
+        // Then
+        XCTAssertFalse(sut.displayableCities.isEmpty)
+        XCTAssertEqual(sut.displayableCities.count, 2)
+        XCTAssertEqual(sut.displayableCities[0], favoriteCities[0])
+        XCTAssertEqual(sut.displayableCities[1], favoriteCities[1])
+
+        // When
+        await sut.toggleFavorites()
+
+        // Then
+        XCTAssertFalse(sut.displayableCities.isEmpty)
+        XCTAssertEqual(sut.displayableCities.count, 4)
+    }
+
+    func test_whenCityIsAddedToFavorites_isFavoriteShouldReturnTrue() async {
+        // Given
+        let city = City(id: 0, country: "AR", name: "Buenos Aires", coordinate: Coordinate(longitude: 0.0, latitude: 0.0))
+
+        cityRepository.cities = [city]
+        favoritesRepository.favoriteCities = []
+
+        // When
+        await sut.loadCities()
+        await sut.loadFavorites()
+
+        // Then
+        XCTAssertFalse(sut.isFavorite(city))
+
+        // When
+        await sut.addToFavorites(city)
+
+        // Then
+        XCTAssertTrue(sut.isFavorite(city))
+    }
+
+    func test_whenCityIsRemovedFromFavorites_isFavoriteShouldReturnFalse() async {
+        // Given
+        let city = City(id: 0, country: "AR", name: "Buenos Aires", coordinate: Coordinate(longitude: 0.0, latitude: 0.0))
+
+        cityRepository.cities = [city]
+        favoritesRepository.favoriteCities = [city]
+
+        // When
+        await sut.loadCities()
+        await sut.loadFavorites()
+
+        // Then
+        XCTAssertTrue(sut.isFavorite(city))
+
+        // When
+        await sut.removeFromFavorites(city)
+
+        // Then
+        XCTAssertFalse(sut.isFavorite(city))
     }
 }

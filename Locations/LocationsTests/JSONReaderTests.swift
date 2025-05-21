@@ -36,7 +36,7 @@ final class JSONReaderTests: XCTestCase {
 
     func test_whenDataTypeMismatches_throwsUnableToDecode() async {
         // Given
-        let fileName = "cities"
+        let fileName = "cities-small"
 
         do {
             // When
@@ -51,7 +51,7 @@ final class JSONReaderTests: XCTestCase {
 
     func test_whenFileExists_andTypeMatches_dataIsDecoded() async {
         // Given
-        let fileName = "cities"
+        let fileName = "cities-small"
 
         do {
             // When
