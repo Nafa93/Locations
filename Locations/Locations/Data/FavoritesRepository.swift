@@ -35,9 +35,9 @@ final class MockFavoritesRepository: FavoritesRepository {
 }
 
 final class LocalFavoritesRepository: FavoritesRepository {
-    let coreDataPersistance: CoreDataPersistance
+    let coreDataPersistance: CoreDataPersistence
 
-    init(coreDataPersistance: CoreDataPersistance) {
+    init(coreDataPersistance: CoreDataPersistence) {
         self.coreDataPersistance = coreDataPersistance
     }
 

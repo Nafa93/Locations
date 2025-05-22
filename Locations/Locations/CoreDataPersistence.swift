@@ -1,5 +1,5 @@
 //
-//  Persistence.swift
+//  CoreDataPersistence.swift
 //  Locations
 //
 //  Created by Nicolas Alejandro Fernandez Amorosino on 19/05/2025.
@@ -7,14 +7,24 @@
 
 import CoreData
 
-struct CoreDataPersistance {
+struct CoreDataPersistence {
     @MainActor
-    static let preview: CoreDataPersistance = {
-        let result = CoreDataPersistance(inMemory: true)
+    static let preview: CoreDataPersistence = {
+        let result = CoreDataPersistence(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-//            let newItem = Item(context: viewContext)
-//            newItem.timestamp = Date()
+        for index in 0..<10 {
+            let newItem = CityDataModel(
+                City(
+                    id: index,
+                    country: "AR",
+                    name: "City #\(index)",
+                    coordinate: Coordinate(
+                        longitude: 0.0,
+                        latitude: 0.0
+                    )
+                ),
+                context: viewContext
+            )
         }
         do {
             try viewContext.save()
@@ -69,6 +79,7 @@ struct CoreDataPersistance {
     func getAll<T: NSManagedObject>() async throws -> [T] {
         try await withCheckedThrowingContinuation { continuation in
             let fetchRequest = T.fetchRequest()
+            fetchRequest.returnsObjectsAsFaults = false
 
             guard let typedRequest = fetchRequest as? NSFetchRequest<T> else {
                 continuation.resume(throwing: Errors.unableToParseRequestType)
@@ -85,7 +96,7 @@ struct CoreDataPersistance {
     }
 }
 
-extension CoreDataPersistance {
+extension CoreDataPersistence {
     enum Errors: Error {
         case unableToParseRequestType, unableToFetchItems, failedToSaveContext
     }
