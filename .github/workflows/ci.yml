@@ -23,6 +23,7 @@ jobs:
     - name: Run Tests
       run: |
         xcodebuild test \
+          -project Locations/Locations.xcodeproj \
           -scheme Locations \
           -destination 'platform=iOS Simulator,name=iPhone 14' \
           -enableCodeCoverage YES
