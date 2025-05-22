@@ -27,10 +27,27 @@ struct CityListView: View {
             .padding(.horizontal, 24)
 
             List(viewModel.displayableCities) { item in
-                Text(item.name)
-                    .onAppear {
-                        print(item.name)
-                    }
+                CityCellView(
+                    viewModel: CityCellViewModel(
+                        city: item,
+                        isFavorite: viewModel.isFavorite(item),
+                        onFavoritesButtonTapped: { city in
+                            print(
+                                city
+                            )
+                        },
+                        onCellTapped: { city in
+                            print(
+                                city
+                            )
+                        },
+                        onDetailButtonTapped: { city in
+                            print(
+                                city
+                            )
+                        }
+                    )
+                )
             }
             .onAppear {
                 Task {
