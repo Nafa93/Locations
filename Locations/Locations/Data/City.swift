@@ -19,4 +19,20 @@ struct City: Codable, Equatable, Hashable {
         case name
         case coordinate = "coord"
     }
+
+    init(id: Int, country: String, name: String, coordinate: Coordinate) {
+        self.id = id
+        self.country = country
+        self.name = name
+        self.coordinate = coordinate
+    }
+}
+
+extension City {
+    init(model: CityDataModel) {
+        self.id = Int(model.id)
+        self.country = model.country ?? ""
+        self.name = model.name ?? ""
+        self.coordinate = Coordinate(longitude: model.longitude, latitude: model.latitude)
+    }
 }

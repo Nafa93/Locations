@@ -32,13 +32,17 @@ import Foundation
             allCities = sortedCities
             displayableCities = sortedCities
         } catch {
-            self.error = .failedToLoad
+            self.error = .failedToLoadCities
         }
     }
 
     @MainActor
     func loadFavorites() async {
-        favoritesCities = Set(await favoritesRepository.getAll())
+        do {
+            favoritesCities = Set(try await favoritesRepository.getAll())
+        } catch {
+            self.error = .failedToAddToFavorites
+        }
     }
 
     @MainActor
@@ -64,14 +68,22 @@ import Foundation
 
     @MainActor
     func addToFavorites(_ city: City) async {
-        favoritesCities.insert(city)
-        await favoritesRepository.addCity(city)
+        do {
+            try await favoritesRepository.addCity(city)
+            favoritesCities.insert(city)
+        } catch {
+            self.error = .failedToAddToFavorites
+        }
     }
 
     @MainActor
     func removeFromFavorites(_ city: City) async {
-        favoritesCities.remove(city)
-        await favoritesRepository.removeCity(city)
+        do {
+            try await favoritesRepository.removeCity(city)
+            favoritesCities.remove(city)
+        } catch {
+            self.error = .failedToRemoveFromFavorites
+        }
     }
 
     func isFavorite(_ city: City) -> Bool {
@@ -85,12 +97,21 @@ import Foundation
 
 extension CityListViewModel {
     enum Errors: Error, LocalizedError {
-        case failedToLoad
+        case failedToLoadCities,
+             failedToLoadFavorites,
+             failedToAddToFavorites,
+             failedToRemoveFromFavorites
 
         var errorDescription: String? {
             switch self {
-                case .failedToLoad:
+                case .failedToLoadCities:
                     "Failed to load cities"
+                case .failedToLoadFavorites:
+                    "Failed to load favorite cities"
+                case .failedToAddToFavorites:
+                    "Failed to add city to favorites"
+                case .failedToRemoveFromFavorites:
+                    "Failed to remove city from favorites"
             }
         }
     }
