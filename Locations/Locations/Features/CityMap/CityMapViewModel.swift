@@ -10,13 +10,13 @@ import MapKit
 
 @Observable final class CityMapViewModel {
     private static var defaultCoordinate = CLLocationCoordinate2D(
-        latitude: -34.6274385,
-        longitude: -58.6060926
+        latitude: -34.5875395,
+        longitude: -58.4261227
     )
 
     private static var defaultSpan = MKCoordinateSpan(
-        latitudeDelta: 0.05,
-        longitudeDelta: 0.05
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005
     )
 
     var region = MKCoordinateRegion(
