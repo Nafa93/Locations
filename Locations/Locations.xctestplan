@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "77FBD91B-542E-449C-BAE5-5DE99EEB832D",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Locations.xcodeproj",
+      "identifier" : "191BE54D2DDBF64F004FBB13",
+      "name" : "Locations"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Locations.xcodeproj",
+        "identifier" : "191BE5622DDBF651004FBB13",
+        "name" : "LocationsTests"
+      }
+    }
+  ],
+  "version" : 1
+}
