@@ -91,6 +91,20 @@ final class CityListViewModelTests: XCTestCase {
         XCTAssertEqual(sut.displayableCities[3], cities[1])
     }
 
+    func test_whenSearchPrefixIsEmptyString_returnsAllCities() async throws {
+        // Given
+        let cities = mockCities()
+        let prefix = ""
+        cityRepository.cities = cities
+
+        // When
+        await sut.loadCities()
+        await sut.searchPrefix(prefix)
+
+        // Then
+        XCTAssertEqual(sut.displayableCities, cities)
+    }
+
     func test_favouritesFilterTurnsTrue_whenCurrentStateIsFalse_andFavouritesToggleIsTriggered() async {
         // Given
         sut.isFavoritesOn = false

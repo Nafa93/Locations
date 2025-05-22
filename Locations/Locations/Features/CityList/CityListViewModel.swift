@@ -49,6 +49,11 @@ import Foundation
     func searchPrefix(_ prefix: String) async {
         currentPrefix = prefix
 
+        guard prefix != "" else {
+            displayableCities = allCities
+            return
+        }
+
         let sortedCities = sortCities(await cityRepository.search(prefix: prefix))
 
         if isFavoritesOn {
