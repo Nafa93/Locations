@@ -16,12 +16,15 @@ protocol Coordinator: AnyObject {
 final class AppCoordinator: Coordinator {
     let navigationController: UINavigationController
 
+    var childCoordinators: [Coordinator] = []
+
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
 
     func start() {
         let main = MainCoordinator(navigationController: navigationController)
+        childCoordinators.append(main)
         main.start()
     }
 }

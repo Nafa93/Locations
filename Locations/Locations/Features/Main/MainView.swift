@@ -23,16 +23,37 @@ struct MainView: View {
         GeometryReader { geometryReader in
             VStack {
                 if viewModel.isLoading {
-                    SplashView(title: viewModel.title)
+                    ZStack(alignment: .center) {
+                        SplashView(title: viewModel.title)
+                    }
+                    .frame(width: geometryReader.size.width, height: geometryReader.size.height)
                 } else {
                     if isPortrait {
                         CityListView(viewModel: viewModel.cityListViewModel)
+                            .padding(.top, 52)
                     } else {
                         HStack(spacing: 0) {
-                            CityListView(viewModel: viewModel.cityListViewModel)
-                                .frame(width: geometryReader.size.width * 0.4)
+                            if viewModel.isSideListVisible {
+                                CityListView(viewModel: viewModel.cityListViewModel)
+                                    .padding(.top, 20)
+                                    .frame(width: geometryReader.size.width * 0.4)
+                            }
 
-                            CityMapView(viewModel: viewModel.mapViewModel)
+                            ZStack(alignment: .topLeading) {
+                                CityMapView(viewModel: viewModel.mapViewModel)
+
+                                Button {
+                                    withAnimation {
+                                        viewModel.toggleSideList()
+                                    }
+                                } label: {
+                                    Image(systemName: viewModel.isSideListVisible ? "sidebar.leading" : "sidebar.trailing")
+                                        .padding()
+                                        .background(.white)
+                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                                }
+                                .padding()
+                            }
                         }
                     }
                 }
@@ -43,6 +64,7 @@ struct MainView: View {
                 }
             }
         }
+        .animation(.easeInOut, value: viewModel.isSideListVisible)
         .edgesIgnoringSafeArea(.all)
     }
 }

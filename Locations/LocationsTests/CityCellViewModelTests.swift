@@ -77,10 +77,12 @@ final class CityCellViewModelTests: XCTestCase {
         )
 
         // When
-        let subtitle = sut.subtitle
+        let latitudeSubtitle = sut.latitudeSubtitle
+        let longitudeSubtitle = sut.longitudeSubtitle
 
         // Then
-        XCTAssertEqual(subtitle, "lat: 0.0, lon: 0.0")
+        XCTAssertEqual(latitudeSubtitle, "Latitude: 0.0")
+        XCTAssertEqual(longitudeSubtitle, "Longitude: 0.0")
     }
 
     func test_onFavoritesTapped_completionIsCalled() {

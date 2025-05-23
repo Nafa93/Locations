@@ -7,6 +7,7 @@
 
 import Foundation
 import MapKit
+import _MapKit_SwiftUI
 
 @Observable final class CityMapViewModel {
     private static var defaultCoordinate = CLLocationCoordinate2D(
@@ -14,34 +15,38 @@ import MapKit
         longitude: -58.4261227
     )
 
-    private static var defaultSpan = MKCoordinateSpan(
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005
-    )
-
-    var region = MKCoordinateRegion(
-        center: CityMapViewModel.defaultCoordinate,
-        span: CityMapViewModel.defaultSpan
-    )
+    var position: MapCameraPosition
 
     init(
         latitude: Double = CityMapViewModel.defaultCoordinate.latitude,
         longitude: Double = CityMapViewModel.defaultCoordinate.longitude
     ) {
-        self.region = MKCoordinateRegion(
-            center: CLLocationCoordinate2D(
-                latitude: latitude,
-                longitude: longitude
-            ),
-            span: CityMapViewModel.defaultSpan
+        self.position = .camera(
+            MapCamera(
+                centerCoordinate: CityMapViewModel.defaultCoordinate,
+                distance: 1000
+            )
         )
     }
 
     @MainActor
     func onCityTapped(_ city: City) -> Void {
-        self.region.center = CLLocationCoordinate2D(
-            latitude: city.coordinate.latitude,
-            longitude: city.coordinate.longitude
+        self.position = .camera(
+            MapCamera(
+                centerCoordinate: CLLocationCoordinate2D(
+                    latitude: city.coordinate.latitude,
+                    longitude: city.coordinate.longitude
+                ),
+                distance: 1000
+            )
         )
+    }
+}
+
+extension CityMapViewModel: CityListViewModelDelegate {
+    func onCitySelected(_ city: City) async {
+        Task {
+            await onCityTapped(city)
+        }
     }
 }

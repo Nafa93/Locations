@@ -6,16 +6,24 @@
 //
 
 import Foundation
+import UIKit
+
+protocol CityListViewModelDelegate: AnyObject {
+    func onCitySelected(_ city: City) async -> Void
+}
 
 @Observable final class CityListViewModel {
     private let cityRepository: CityRepository
     private let favoritesRepository: FavoritesRepository
     private var allCities: [City] = []
-    private var favoritesCities: Set<City> = []
+    var favoritesCities: Set<City> = []
     var displayableCities: [City] = []
     var error: Errors?
     var isFavoritesOn = false
     var currentPrefix = ""
+
+    weak var delegate: CityListViewModelDelegate?
+    weak var coordinator: MainCoordinator?
 
     init(
         cityRepository: CityRepository,
@@ -23,6 +31,17 @@ import Foundation
     ) {
         self.cityRepository = cityRepository
         self.favoritesRepository = favoritesRepository
+    }
+
+    @MainActor
+    private var isPortrait: Bool {
+        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            let orientation = scene.interfaceOrientation
+
+            return orientation.isPortrait
+        } else {
+            return true
+        }
     }
 
     @MainActor
@@ -70,19 +89,14 @@ import Foundation
     }
 
     @MainActor
-    func toggleFavorites() async {
-        isFavoritesOn.toggle()
-
-        await searchPrefix(currentPrefix)
-    }
-
-    @MainActor
     func upsertFavorite(_ city: City) async {
         if isFavorite(city) {
             await removeFromFavorites(city)
         } else {
             await addToFavorites(city)
         }
+
+        await searchPrefix(currentPrefix)
     }
 
     private func addToFavorites(_ city: City) async {
@@ -105,6 +119,15 @@ import Foundation
 
     func isFavorite(_ city: City) -> Bool {
         return favoritesCities.contains(city)
+    }
+
+    @MainActor
+    func onCellTapped(_ city: City) async {
+        if isPortrait {
+            coordinator?.goToDetail(city)
+        } else {
+            await delegate?.onCitySelected(city)
+        }
     }
 
     private func sortCities(_ cities: [City]) -> [City] {

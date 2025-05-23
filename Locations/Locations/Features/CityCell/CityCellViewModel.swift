@@ -14,7 +14,7 @@ import SwiftUI
     private let onCellTapped: (City) -> Void
     private let onDetailButtonTapped: (City) -> Void
 
-    let isFavorite: Bool
+    var isFavorite: Bool
 
     init(
         city: City,
@@ -55,6 +55,7 @@ import SwiftUI
     }
 
     func favoriteButtonHandler() {
+        isFavorite = !isFavorite
         onFavoritesButtonTapped(city)
     }
 

@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 
-final class MainCoordinator {
+final class MainCoordinator: Coordinator {
     let navigationController: UINavigationController
 
     init(navigationController: UINavigationController) {
@@ -24,15 +24,25 @@ final class MainCoordinator {
                 coreDataPersistance: CoreDataPersistence()
             )
         )
+        cityListViewModel.coordinator = self
         let cityMapViewModel = CityMapViewModel()
         let mainViewModel = MainViewModel(
             cityListViewModel: cityListViewModel,
             mapViewModel: cityMapViewModel
         )
+        cityListViewModel.delegate = cityMapViewModel
 
         let view = MainView(viewModel: mainViewModel)
         let vc = UIHostingController(rootView: view)
-        // TODO: Hide navigation bar
+        navigationController.setNavigationBarHidden(true, animated: false)
+        navigationController.pushViewController(vc, animated: true)
+    }
+
+    func goToDetail(_ city: City) {
+        let view = Text("Detail: \(city.name)")
+        let vc = UIHostingController(rootView: view)
+        navigationController.setNavigationBarHidden(false, animated: false)
         navigationController.pushViewController(vc, animated: true)
     }
 }
+

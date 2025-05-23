@@ -15,7 +15,9 @@ import Foundation
         "Locations".uppercased()
     }
 
-    var isLoading: Bool = false
+    var isLoading = true
+
+    var isSideListVisible = true
 
     init(cityListViewModel: CityListViewModel, mapViewModel: CityMapViewModel) {
         self.cityListViewModel = cityListViewModel
@@ -26,10 +28,17 @@ import Foundation
     func bootstrap() async {
         defer { isLoading = false }
 
+        guard cityListViewModel.displayableCities.isEmpty else { return }
+
         isLoading = true
 
         await cityListViewModel.loadCities()
 
         await cityListViewModel.loadFavorites()
+    }
+
+    @MainActor
+    func toggleSideList() {
+        isSideListVisible.toggle()
     }
 }

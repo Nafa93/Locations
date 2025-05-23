@@ -32,13 +32,6 @@ struct CityCellView: View {
             Spacer()
 
             Button {
-                viewModel.detailButtonHandler()
-            } label: {
-                Text("Detail")
-            }
-            .buttonStyle(.borderedProminent)
-
-            Button {
                 viewModel.favoriteButtonHandler()
             } label: {
                 Image(systemName: viewModel.favoriteImageName)
@@ -51,8 +44,17 @@ struct CityCellView: View {
             )
             .buttonStyle(.borderless)
             .tint(viewModel.favoriteStarColor)
+
+
+            Button {
+                viewModel.detailButtonHandler()
+            } label: {
+                Text("Detail")
+            }
+            .buttonStyle(.borderedProminent)
         }
         .padding(8)
+        .background(.white)
         .onTapGesture {
             viewModel.cellTapHandler()
         }

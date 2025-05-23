@@ -15,29 +15,31 @@ struct CityListView: View {
     }
 
     var body: some View {
-        VStack {
-            // TODO: Make textfield stick to top
-            HStack(spacing: 20) {
+        VStack(spacing: 0) {
+            VStack(spacing: 20) {
                 TextField(text: $viewModel.currentPrefix) {
                     Label("Search cities by name", systemImage: "magnifyingglass")
                 }
                 .textFieldStyle(.roundedBorder)
-                .onChange(of: viewModel.currentPrefix) { oldValue, newValue in
+                .onChange(of: viewModel.currentPrefix) { _, newValue in
                     Task {
                         await viewModel.searchPrefix(newValue)
                     }
                 }
 
-                Button {
-                    Task {
-                        await viewModel.toggleFavorites()
-                    }
-                } label: {
+                Toggle(isOn: $viewModel.isFavoritesOn) {
                     Text("Favorites")
                 }
-                .buttonStyle(.borderedProminent)
+                .onChange(of: viewModel.isFavoritesOn) { _, _ in
+                    Task {
+                        await viewModel.searchPrefix(viewModel.currentPrefix)
+                    }
+                }
             }
             .padding(.horizontal, 24)
+            .padding(.vertical, 12)
+
+            Divider()
 
             ScrollView(.vertical, showsIndicators: false) {
                 LazyVStack {
@@ -52,9 +54,9 @@ struct CityListView: View {
                                     }
                                 },
                                 onCellTapped: { city in
-                                    print(
-                                        city
-                                    )
+                                    Task {
+                                        await viewModel.onCellTapped(city)
+                                    }
                                 },
                                 onDetailButtonTapped: { city in
                                     print(
