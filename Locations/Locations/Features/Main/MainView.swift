@@ -77,6 +77,7 @@ struct SplashView: View {
             Text(title)
                 .fontWeight(.bold)
                 .font(.largeTitle)
+                .accessibilityIdentifier("splash.title")
 
             ProgressView()
         }

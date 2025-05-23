@@ -13,9 +13,17 @@
       "containerPath" : "container:Locations.xcodeproj",
       "identifier" : "191BE54D2DDBF64F004FBB13",
       "name" : "Locations"
-    }
+    },
+    "testExecutionOrdering" : "random"
   },
   "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Locations.xcodeproj",
+        "identifier" : "191BE56C2DDBF651004FBB13",
+        "name" : "LocationsUITests"
+      }
+    },
     {
       "parallelizable" : true,
       "target" : {
