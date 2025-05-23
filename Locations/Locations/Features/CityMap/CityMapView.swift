@@ -19,6 +19,7 @@ struct CityMapView: View {
         Map(position: $viewModel.position) {
             Marker(viewModel.title, coordinate: viewModel.currentCoordinate)
         }
+        .accessibilityIdentifier("city_map_view")
     }
 }
 

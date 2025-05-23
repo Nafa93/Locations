@@ -16,7 +16,7 @@ final class CityListViewUITests: XCTestCase {
         app.launchEnvironment["UITestMode"] = "true"
     }
 
-    func test_cityList_layout() throws {
+    func test_cityList_portraitLayout() throws {
         XCUIDevice.shared.orientation = .portrait
 
         app.launch()
@@ -30,6 +30,26 @@ final class CityListViewUITests: XCTestCase {
         XCTAssertTrue(textField.exists)
         XCTAssertTrue(scrollView.exists)
         XCTAssertTrue(toggle.exists)
+    }
+
+    func test_cityList_landscapeLayout() {
+        XCUIDevice.shared.orientation = .landscapeLeft
+
+        app.launch()
+
+        let textField = app.textFields["city_list.search"]
+        let scrollView = app.scrollViews["city_list.scrollview"]
+        let toggle = app.switches["city_list.favorites_toggle"]
+        let map = app.otherElements["city_map_view"]
+
+        _ = scrollView.waitForExistence(timeout: 5)
+        _ = map.waitForExistence(timeout: 5)
+
+        XCTAssertTrue(textField.exists)
+        XCTAssertTrue(scrollView.exists)
+        XCTAssertTrue(toggle.exists)
+        print(app.debugDescription)
+        XCTAssertTrue(map.exists)
     }
 
     @MainActor
