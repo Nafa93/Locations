@@ -9,22 +9,17 @@ import UIKit
 import SwiftUI
 
 final class MainCoordinator: Coordinator {
-    private let coreDatePersistance = CoreDataPersistence()
-
     let navigationController: UINavigationController
 
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
+        print("Nafa ", Dependencies.shared.isUITest())
     }
 
     func start() {
         let cityListViewModel = CityListViewModel(
-            cityRepository: LocalCityRepository(
-                searchableDataSet: TernarySearchTree()
-            ),
-            favoritesRepository: LocalFavoritesRepository(
-                coreDataPersistance: coreDatePersistance
-            )
+            cityRepository: Dependencies.shared.cityRepository,
+            favoritesRepository: Dependencies.shared.favoritesRepository
         )
         cityListViewModel.coordinator = self
         let cityMapViewModel = CityMapViewModel()

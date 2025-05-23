@@ -27,12 +27,3 @@ struct City: Codable, Equatable, Hashable, Identifiable {
         self.coordinate = coordinate
     }
 }
-
-extension City {
-    init(model: CityDataModel) {
-        self.id = Int(model.id)
-        self.country = model.country ?? ""
-        self.name = model.name ?? ""
-        self.coordinate = Coordinate(longitude: model.longitude, latitude: model.latitude)
-    }
-}

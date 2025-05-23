@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		195971AE2DE0D4D800955128 /* CityDataModel+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195971AC2DE0D4D800955128 /* CityDataModel+CoreDataClass.swift */; };
+		195971AF2DE0D4D800955128 /* CityDataModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195971AD2DE0D4D800955128 /* CityDataModel+CoreDataProperties.swift */; };
+		195971B02DE0D4D800955128 /* CityDataModel+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195971AC2DE0D4D800955128 /* CityDataModel+CoreDataClass.swift */; };
+		195971B12DE0D4D800955128 /* CityDataModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195971AD2DE0D4D800955128 /* CityDataModel+CoreDataProperties.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		191BE5642DDBF651004FBB13 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -28,6 +35,8 @@
 		191BE5632DDBF651004FBB13 /* LocationsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LocationsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		191BE56D2DDBF651004FBB13 /* LocationsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LocationsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		195970C82DDFADDD00955128 /* Locations.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Locations.xctestplan; sourceTree = "<group>"; };
+		195971AC2DE0D4D800955128 /* CityDataModel+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CityDataModel+CoreDataClass.swift"; path = "Locations/Data/CityDataModel+CoreDataClass.swift"; sourceTree = "<group>"; };
+		195971AD2DE0D4D800955128 /* CityDataModel+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CityDataModel+CoreDataProperties.swift"; path = "Locations/Data/CityDataModel+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -38,6 +47,24 @@
 			);
 			target = 191BE54D2DDBF64F004FBB13 /* Locations */;
 		};
+		195971A12DE0CF2D00955128 /* Exceptions for "Locations" folder in "LocationsUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Algorithms/SearchableDataSet.swift,
+				Algorithms/TernarySearchTree.swift,
+				Data/City.swift,
+				"Data/City+CoreData.swift",
+				"Data/CityDataModel+CoreDataClass.swift",
+				"Data/CityDataModel+CoreDataProperties.swift",
+				Data/CityRepository.swift,
+				Data/Coordinate.swift,
+				Data/CoreDataPersistence.swift,
+				Data/FavoritesRepository.swift,
+				Data/JSONReader.swift,
+				Dependencies.swift,
+			);
+			target = 191BE56C2DDBF651004FBB13 /* LocationsUITests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -45,6 +72,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				195970E62DDFB8B600955128 /* Exceptions for "Locations" folder in "Locations" target */,
+				195971A12DE0CF2D00955128 /* Exceptions for "Locations" folder in "LocationsUITests" target */,
 			);
 			path = Locations;
 			sourceTree = "<group>";
@@ -89,6 +117,8 @@
 		191BE5452DDBF64F004FBB13 = {
 			isa = PBXGroup;
 			children = (
+				195971AC2DE0D4D800955128 /* CityDataModel+CoreDataClass.swift */,
+				195971AD2DE0D4D800955128 /* CityDataModel+CoreDataProperties.swift */,
 				191BE5502DDBF64F004FBB13 /* Locations */,
 				191BE5662DDBF651004FBB13 /* LocationsTests */,
 				191BE5702DDBF651004FBB13 /* LocationsUITests */,
@@ -251,6 +281,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				195971AE2DE0D4D800955128 /* CityDataModel+CoreDataClass.swift in Sources */,
+				195971AF2DE0D4D800955128 /* CityDataModel+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +297,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				195971B02DE0D4D800955128 /* CityDataModel+CoreDataClass.swift in Sources */,
+				195971B12DE0D4D800955128 /* CityDataModel+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

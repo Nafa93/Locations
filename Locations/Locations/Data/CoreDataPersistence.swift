@@ -86,7 +86,6 @@ struct CoreDataPersistence {
     func getAll<T: NSManagedObject>() async throws -> [T] {
         try await withCheckedThrowingContinuation { continuation in
             let fetchRequest = T.fetchRequest()
-//            fetchRequest.returnsObjectsAsFaults = false
 
             guard let typedRequest = fetchRequest as? NSFetchRequest<T> else {
                 continuation.resume(throwing: Errors.unableToParseRequestType)

@@ -20,6 +20,7 @@ struct CityListView: View {
                 TextField(text: $viewModel.currentPrefix) {
                     Label("Search cities by name", systemImage: "magnifyingglass")
                 }
+                .accessibilityIdentifier("city_list.search")
                 .textFieldStyle(.roundedBorder)
                 .onChange(of: viewModel.currentPrefix) { _, newValue in
                     Task {
@@ -30,6 +31,7 @@ struct CityListView: View {
                 Toggle(isOn: $viewModel.isFavoritesOn) {
                     Text("Favorites")
                 }
+                .accessibilityIdentifier("city_list.favorites_toggle")
                 .onChange(of: viewModel.isFavoritesOn) { _, _ in
                     Task {
                         await viewModel.searchPrefix(viewModel.currentPrefix)
@@ -63,11 +65,13 @@ struct CityListView: View {
                                 }
                             )
                         )
+                        .accessibilityIdentifier("city_list_item.\(item.name)")
 
                         Divider()
                     }
                 }
             }
+            .accessibilityIdentifier("city_list.scrollview")
             .safeAreaPadding(.horizontal, 24)
         }
     }

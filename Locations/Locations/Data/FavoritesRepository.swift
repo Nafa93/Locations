@@ -35,29 +35,29 @@ final class MockFavoritesRepository: FavoritesRepository {
 }
 
 final class LocalFavoritesRepository: FavoritesRepository {
-    let coreDataPersistance: CoreDataPersistence
+    let coreDataPersistence: CoreDataPersistence
 
-    init(coreDataPersistance: CoreDataPersistence) {
-        self.coreDataPersistance = coreDataPersistance
+    init(coreDataPersistence: CoreDataPersistence) {
+        self.coreDataPersistence = coreDataPersistence
     }
 
     func getAll() async throws -> [City] {
-        let results: [CityDataModel]  = try await coreDataPersistance.getAll()
+        let results: [CityDataModel]  = try await coreDataPersistence.getAll()
         return results.map { City(model: $0) }
     }
     
     func addCity(_ city: City) async throws {
-        let cityDataModel = CityDataModel(city, context: coreDataPersistance.container.viewContext)
+        let cityDataModel = CityDataModel(city, context: coreDataPersistence.container.viewContext)
 
-        await coreDataPersistance.insert(cityDataModel)
+        await coreDataPersistence.insert(cityDataModel)
 
-        try await coreDataPersistance.saveContext()
+        try await coreDataPersistence.saveContext()
     }
     
     func removeCity(_ city: City) async throws {
-        if let cityDataModel: CityDataModel = try await coreDataPersistance.getById(city.id) {
-            await coreDataPersistance.delete(cityDataModel)
-            try await coreDataPersistance.saveContext()
+        if let cityDataModel: CityDataModel = try await coreDataPersistence.getById(city.id) {
+            await coreDataPersistence.delete(cityDataModel)
+            try await coreDataPersistence.saveContext()
         }
     }
 }
