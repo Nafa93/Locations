@@ -76,6 +76,7 @@ protocol CityListViewModelDelegate: AnyObject {
         await searchOnDataSet(prefix)
     }
 
+    @MainActor
     private func displayAllCities() {
         if isFavoritesOn {
             displayableCities = Array(favoritesCities)
@@ -84,6 +85,7 @@ protocol CityListViewModelDelegate: AnyObject {
         }
     }
 
+    @MainActor
     private func searchOnDataSet(_ prefix: String) async {
         let sortedCities = sortCities(await cityRepository.search(prefix: prefix))
 
