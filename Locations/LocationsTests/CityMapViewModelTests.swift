@@ -28,7 +28,7 @@ final class CityMapViewModelTests: XCTestCase {
         await sut.onCityTapped(city)
 
         // Then
-        XCTAssertEqual(sut.region.center.latitude, city.coordinate.latitude)
-        XCTAssertEqual(sut.region.center.longitude, city.coordinate.longitude)
+        XCTAssertEqual(sut.position.region?.center.latitude, city.coordinate.latitude)
+        XCTAssertEqual(sut.position.region?.center.longitude, city.coordinate.longitude)
     }
 }
