@@ -17,22 +17,33 @@ import _MapKit_SwiftUI
 
     var position: MapCameraPosition
 
+    var currentCoordinate: CLLocationCoordinate2D
+
+    var title: String
+
     init(
         latitude: Double = CityMapViewModel.defaultCoordinate.latitude,
         longitude: Double = CityMapViewModel.defaultCoordinate.longitude,
-        distance: Double = 1000
+        distance: Double = 1000,
+        title: String = "UALA"
     ) {
+        let coordinate = CLLocationCoordinate2D(
+            latitude: latitude,
+            longitude: longitude
+        )
+
         self.position = .camera(
             MapCamera(
-                centerCoordinate: CLLocationCoordinate2D(
-                    latitude: latitude,
-                    longitude: longitude
-                ),
+                centerCoordinate: coordinate,
                 distance: distance
             )
         )
+
+        self.currentCoordinate = coordinate
+
+        self.title = title
     }
-// TODO: Add Marker
+
     @MainActor
     func onCityTapped(_ city: City) -> Void {
         self.position = .camera(
@@ -44,6 +55,10 @@ import _MapKit_SwiftUI
                 distance: 10000
             )
         )
+
+        self.currentCoordinate = CLLocationCoordinate2D(latitude: city.coordinate.latitude, longitude: city.coordinate.longitude)
+
+        self.title = city.name
     }
 }
 

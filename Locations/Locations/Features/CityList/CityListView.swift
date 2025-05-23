@@ -65,7 +65,6 @@ struct CityListView: View {
                                 }
                             )
                         )
-                        .accessibilityIdentifier("city_list_item.\(item.name)")
 
                         Divider()
                     }

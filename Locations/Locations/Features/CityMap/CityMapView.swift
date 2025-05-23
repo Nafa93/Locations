@@ -17,7 +17,7 @@ struct CityMapView: View {
 
     var body: some View {
         Map(position: $viewModel.position) {
-//            Marker("Testing", coordinate: viewModel.position.camera?.centerCoordinate)
+            Marker(viewModel.title, coordinate: viewModel.currentCoordinate)
         }
     }
 }

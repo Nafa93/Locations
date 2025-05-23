@@ -42,6 +42,7 @@ struct CityCellView: View {
                     .fill(viewModel.favoriteBackgroundColor)
                     .stroke(.yellow)
             )
+            .accessibilityIdentifier("city_list_item.favorite.\(viewModel.title)")
             .buttonStyle(.borderless)
             .tint(viewModel.favoriteStarColor)
 
@@ -58,6 +59,7 @@ struct CityCellView: View {
         .onTapGesture {
             viewModel.cellTapHandler()
         }
+        .accessibilityIdentifier("city_list_item.\(viewModel.title)")
     }
 }
 

@@ -18,12 +18,14 @@ struct CityDetailView: View {
         GeometryReader { geometryReader in
             ZStack {
                 Color(uiColor: .systemGray6)
+                    .ignoresSafeArea(edges: .all)
 
                 VStack {
                     CityMapView(
                         viewModel: CityMapViewModel(
                             latitude: viewModel.latitude,
-                            longitude: viewModel.longitude
+                            longitude: viewModel.longitude,
+                            title: viewModel.title
                         )
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 10))
