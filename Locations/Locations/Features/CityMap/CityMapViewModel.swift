@@ -19,12 +19,16 @@ import _MapKit_SwiftUI
 
     init(
         latitude: Double = CityMapViewModel.defaultCoordinate.latitude,
-        longitude: Double = CityMapViewModel.defaultCoordinate.longitude
+        longitude: Double = CityMapViewModel.defaultCoordinate.longitude,
+        distance: Double = 1000
     ) {
         self.position = .camera(
             MapCamera(
-                centerCoordinate: CityMapViewModel.defaultCoordinate,
-                distance: 1000
+                centerCoordinate: CLLocationCoordinate2D(
+                    latitude: latitude,
+                    longitude: longitude
+                ),
+                distance: distance
             )
         )
     }
@@ -37,7 +41,7 @@ import _MapKit_SwiftUI
                     latitude: city.coordinate.latitude,
                     longitude: city.coordinate.longitude
                 ),
-                distance: 1000
+                distance: 10000
             )
         )
     }

@@ -59,9 +59,7 @@ struct CityListView: View {
                                     }
                                 },
                                 onDetailButtonTapped: { city in
-                                    print(
-                                        city
-                                    )
+                                    viewModel.onDetailTapped(city)
                                 }
                             )
                         )

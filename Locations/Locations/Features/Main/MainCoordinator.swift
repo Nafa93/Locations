@@ -38,9 +38,23 @@ final class MainCoordinator: Coordinator {
         navigationController.pushViewController(vc, animated: true)
     }
 
-    func goToDetail(_ city: City) {
-        let view = Text("Detail: \(city.name)")
+    func goToMapView(_ city: City) {
+        let viewModel = CityMapViewModel(
+            latitude: city.coordinate.latitude,
+            longitude: city.coordinate.longitude,
+            distance: 10000
+        )
+        let view = CityMapView(viewModel: viewModel)
         let vc = UIHostingController(rootView: view)
+        navigationController.setNavigationBarHidden(false, animated: false)
+        navigationController.pushViewController(vc, animated: true)
+    }
+
+    func goToDetailView(_ city: City) {
+        let viewModel = CityDetailViewModel(city: city)
+        let view = CityDetailView(viewModel: viewModel)
+        let vc = UIHostingController(rootView: view)
+        vc.title = viewModel.title
         navigationController.setNavigationBarHidden(false, animated: false)
         navigationController.pushViewController(vc, animated: true)
     }

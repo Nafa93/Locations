@@ -68,6 +68,7 @@ protocol CityListViewModelDelegate: AnyObject {
     func searchPrefix(_ prefix: String) async {
         currentPrefix = prefix
 
+        // TODO: Split into functions
         guard prefix != "" else {
             if isFavoritesOn {
                 displayableCities = Array(favoritesCities)
@@ -124,10 +125,14 @@ protocol CityListViewModelDelegate: AnyObject {
     @MainActor
     func onCellTapped(_ city: City) async {
         if isPortrait {
-            coordinator?.goToDetail(city)
+            coordinator?.goToMapView(city)
         } else {
             await delegate?.onCitySelected(city)
         }
+    }
+
+    func onDetailTapped(_ city: City) {
+        coordinator?.goToDetailView(city)
     }
 
     private func sortCities(_ cities: [City]) -> [City] {
