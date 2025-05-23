@@ -21,6 +21,8 @@ final class CoreDataPersistanceTests: XCTestCase {
 
     func test_whenAddingAnItem_getAllReturnsItem() async throws {
         // Given
+        sut = CoreDataPersistence(inMemory: true)
+
         let cityDataModel = CityDataModel(
             City(
                 id: 0,
@@ -35,7 +37,7 @@ final class CoreDataPersistanceTests: XCTestCase {
         )
 
         // When
-        try await sut.insert(cityDataModel)
+        await sut.insert(cityDataModel)
 
         // Then
         let allItems: [CityDataModel] = try await sut.getAll()
@@ -45,6 +47,8 @@ final class CoreDataPersistanceTests: XCTestCase {
 
     func test_whenRemovingAnItem_getAllResultDoesNotContainItem() async throws {
         // Given
+        sut = CoreDataPersistence(inMemory: true)
+
         let cityDataModel = CityDataModel(
             City(
                 id: 0,
@@ -59,8 +63,8 @@ final class CoreDataPersistanceTests: XCTestCase {
         )
 
         // When
-        try await sut.insert(cityDataModel)
-        try await sut.delete(cityDataModel)
+        await sut.insert(cityDataModel)
+        await sut.delete(cityDataModel)
 
         // Then
         let allItems: [CityDataModel] = try await sut.getAll()

@@ -49,13 +49,16 @@ final class LocalFavoritesRepository: FavoritesRepository {
     func addCity(_ city: City) async throws {
         let cityDataModel = CityDataModel(city, context: coreDataPersistance.container.viewContext)
 
-        try await coreDataPersistance.insert(cityDataModel)
+        await coreDataPersistance.insert(cityDataModel)
+
+        try await coreDataPersistance.saveContext()
     }
     
     func removeCity(_ city: City) async throws {
-        let cityDataModel = CityDataModel(city, context: coreDataPersistance.container.viewContext)
-
-        try await coreDataPersistance.delete(cityDataModel)
+        if let cityDataModel: CityDataModel = try await coreDataPersistance.getById(city.id) {
+            await coreDataPersistance.delete(cityDataModel)
+            try await coreDataPersistance.saveContext()
+        }
     }
 }
 

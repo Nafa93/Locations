@@ -47,31 +47,38 @@ struct CoreDataPersistence {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
-        container.viewContext.automaticallyMergesChangesFromParent = true
     }
 
-    func insert(_ object: NSManagedObject) async throws {
-        try await withCheckedThrowingContinuation { continuation in
+    func insert(_ object: NSManagedObject) async {
+        await withCheckedContinuation { continuation in
             container.viewContext.insert(object)
-
-            do {
-                try container.viewContext.save()
-                continuation.resume()
-            } catch {
-                continuation.resume(throwing: Errors.failedToSaveContext)
-            }
+            continuation.resume()
         }
     }
 
-    func delete(_ object: NSManagedObject) async throws {
-        try await withCheckedThrowingContinuation { continuation in
+    func delete(_ object: NSManagedObject) async {
+        await withCheckedContinuation { continuation in
             container.viewContext.delete(object)
+            continuation.resume()
+        }
+    }
+
+    func getById<T: NSManagedObject>(_ id: Int) async throws -> T? {
+        try await withCheckedThrowingContinuation { continuation in
+            let fetchRequest = T.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "id == %d", Int64(id))
+            fetchRequest.fetchLimit = 1
+
+            guard let typedRequest = fetchRequest as? NSFetchRequest<T> else {
+                continuation.resume(throwing: Errors.unableToParseRequestType)
+                return
+            }
 
             do {
-                try container.viewContext.save()
-                continuation.resume()
+                let result = try container.viewContext.fetch(typedRequest).first
+                continuation.resume(returning: result)
             } catch {
-                continuation.resume(throwing: Errors.failedToSaveContext)
+                continuation.resume(throwing: Errors.unableToFetchItems)
             }
         }
     }
@@ -79,7 +86,7 @@ struct CoreDataPersistence {
     func getAll<T: NSManagedObject>() async throws -> [T] {
         try await withCheckedThrowingContinuation { continuation in
             let fetchRequest = T.fetchRequest()
-            fetchRequest.returnsObjectsAsFaults = false
+//            fetchRequest.returnsObjectsAsFaults = false
 
             guard let typedRequest = fetchRequest as? NSFetchRequest<T> else {
                 continuation.resume(throwing: Errors.unableToParseRequestType)
@@ -91,6 +98,17 @@ struct CoreDataPersistence {
                 continuation.resume(returning: results)
             } catch {
                 continuation.resume(throwing: Errors.unableToFetchItems)
+            }
+        }
+    }
+
+    func saveContext() async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            do {
+                try container.viewContext.save()
+                continuation.resume()
+            } catch {
+                continuation.resume(throwing: Errors.failedToSaveContext)
             }
         }
     }

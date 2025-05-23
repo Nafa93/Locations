@@ -63,22 +63,28 @@ protocol CityListViewModelDelegate: AnyObject {
             self.error = .failedToAddToFavorites
         }
     }
-
+    
     @MainActor
     func searchPrefix(_ prefix: String) async {
         currentPrefix = prefix
 
-        // TODO: Split into functions
         guard prefix != "" else {
-            if isFavoritesOn {
-                displayableCities = Array(favoritesCities)
-            } else {
-                displayableCities = allCities
-            }
+            displayAllCities()
             return
         }
 
-        // TODO: Move sorting to repo because ternary doesn't need it
+        await searchOnDataSet(prefix)
+    }
+
+    private func displayAllCities() {
+        if isFavoritesOn {
+            displayableCities = Array(favoritesCities)
+        } else {
+            displayableCities = allCities
+        }
+    }
+
+    private func searchOnDataSet(_ prefix: String) async {
         let sortedCities = sortCities(await cityRepository.search(prefix: prefix))
 
         if isFavoritesOn {

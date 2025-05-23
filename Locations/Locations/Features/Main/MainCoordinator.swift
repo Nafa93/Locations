@@ -9,6 +9,8 @@ import UIKit
 import SwiftUI
 
 final class MainCoordinator: Coordinator {
+    private let coreDatePersistance = CoreDataPersistence()
+
     let navigationController: UINavigationController
 
     init(navigationController: UINavigationController) {
@@ -21,7 +23,7 @@ final class MainCoordinator: Coordinator {
                 searchableDataSet: TernarySearchTree()
             ),
             favoritesRepository: LocalFavoritesRepository(
-                coreDataPersistance: CoreDataPersistence()
+                coreDataPersistance: coreDatePersistance
             )
         )
         cityListViewModel.coordinator = self
@@ -45,7 +47,7 @@ final class MainCoordinator: Coordinator {
             distance: 10000
         )
         let view = CityMapView(viewModel: viewModel)
-        let vc = UIHostingController(rootView: view)
+        let vc = MapViewController(rootView: view)
         navigationController.setNavigationBarHidden(false, animated: false)
         navigationController.pushViewController(vc, animated: true)
     }
@@ -53,10 +55,25 @@ final class MainCoordinator: Coordinator {
     func goToDetailView(_ city: City) {
         let viewModel = CityDetailViewModel(city: city)
         let view = CityDetailView(viewModel: viewModel)
-        let vc = UIHostingController(rootView: view)
+        let vc = DetailViewController(rootView: view)
         vc.title = viewModel.title
         navigationController.setNavigationBarHidden(false, animated: false)
         navigationController.pushViewController(vc, animated: true)
     }
 }
 
+final class DetailViewController: UIHostingController<CityDetailView> {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+}
+
+final class MapViewController: UIHostingController<CityMapView> {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+}
