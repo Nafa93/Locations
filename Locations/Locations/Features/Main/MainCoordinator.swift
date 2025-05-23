@@ -39,7 +39,8 @@ final class MainCoordinator: Coordinator {
         let viewModel = CityMapViewModel(
             latitude: city.coordinate.latitude,
             longitude: city.coordinate.longitude,
-            distance: 10000
+            distance: 10000,
+            title: city.name
         )
         let view = CityMapView(viewModel: viewModel)
         let vc = MapViewController(rootView: view)
