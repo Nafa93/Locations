@@ -16,45 +16,59 @@ struct CityListView: View {
 
     var body: some View {
         VStack {
-            TextField(text: $viewModel.currentPrefix) {
-                Label("Search cities by name", systemImage: "magnifyingglass")
-            }
-            .onChange(of: viewModel.currentPrefix) { oldValue, newValue in
-                Task {
-                    await viewModel.searchPrefix(newValue)
+            // TODO: Make textfield stick to top
+            HStack(spacing: 20) {
+                TextField(text: $viewModel.currentPrefix) {
+                    Label("Search cities by name", systemImage: "magnifyingglass")
                 }
+                .textFieldStyle(.roundedBorder)
+                .onChange(of: viewModel.currentPrefix) { oldValue, newValue in
+                    Task {
+                        await viewModel.searchPrefix(newValue)
+                    }
+                }
+
+                Button {
+                    Task {
+                        await viewModel.toggleFavorites()
+                    }
+                } label: {
+                    Text("Favorites")
+                }
+                .buttonStyle(.borderedProminent)
             }
             .padding(.horizontal, 24)
 
-            List(viewModel.displayableCities) { item in
-                CityCellView(
-                    viewModel: CityCellViewModel(
-                        city: item,
-                        isFavorite: viewModel.isFavorite(item),
-                        onFavoritesButtonTapped: { city in
-                            print(
-                                city
+            ScrollView(.vertical, showsIndicators: false) {
+                LazyVStack {
+                    ForEach(viewModel.displayableCities) { item in
+                        CityCellView(
+                            viewModel: CityCellViewModel(
+                                city: item,
+                                isFavorite: viewModel.isFavorite(item),
+                                onFavoritesButtonTapped: { city in
+                                    Task {
+                                        await viewModel.upsertFavorite(city)
+                                    }
+                                },
+                                onCellTapped: { city in
+                                    print(
+                                        city
+                                    )
+                                },
+                                onDetailButtonTapped: { city in
+                                    print(
+                                        city
+                                    )
+                                }
                             )
-                        },
-                        onCellTapped: { city in
-                            print(
-                                city
-                            )
-                        },
-                        onDetailButtonTapped: { city in
-                            print(
-                                city
-                            )
-                        }
-                    )
-                )
-            }
-            .onAppear {
-                Task {
-                    await viewModel.loadCities()
-                    await viewModel.loadFavorites()
+                        )
+
+                        Divider()
+                    }
                 }
             }
+            .safeAreaPadding(.horizontal, 24)
         }
     }
 }
@@ -62,9 +76,13 @@ struct CityListView: View {
 #Preview {
     CityListView(
         viewModel: CityListViewModel(
-            cityRepository: LocalCityRepository(searchableDataSet: TernarySearchTree()),
+            cityRepository: LocalCityRepository(
+                searchableDataSet: TernarySearchTree()
+            ),
             favoritesRepository: MockFavoritesRepository(
-                favoriteCities: []
+                favoriteCities: [
+                    City(id: 0, country: "AR", name: "Buenos Aires", coordinate: Coordinate(longitude: 0.0, latitude: 0.0))
+                ]
             )
         )
     )

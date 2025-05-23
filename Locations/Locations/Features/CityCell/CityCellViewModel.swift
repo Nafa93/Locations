@@ -34,8 +34,12 @@ import SwiftUI
         "\(city.name), \(city.country)"
     }
 
-    var subtitle: String {
-        "lat: \(city.coordinate.latitude), lon: \(city.coordinate.longitude)"
+    var latitudeSubtitle: String {
+        "Latitude: \(city.coordinate.latitude)"
+    }
+
+    var longitudeSubtitle: String {
+        "Longitude: \(city.coordinate.longitude)"
     }
 
     var favoriteImageName: String {

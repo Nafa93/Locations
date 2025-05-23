@@ -50,10 +50,15 @@ import Foundation
         currentPrefix = prefix
 
         guard prefix != "" else {
-            displayableCities = allCities
+            if isFavoritesOn {
+                displayableCities = Array(favoritesCities)
+            } else {
+                displayableCities = allCities
+            }
             return
         }
 
+        // TODO: Move sorting to repo because ternary doesn't need it
         let sortedCities = sortCities(await cityRepository.search(prefix: prefix))
 
         if isFavoritesOn {
@@ -72,7 +77,15 @@ import Foundation
     }
 
     @MainActor
-    func addToFavorites(_ city: City) async {
+    func upsertFavorite(_ city: City) async {
+        if isFavorite(city) {
+            await removeFromFavorites(city)
+        } else {
+            await addToFavorites(city)
+        }
+    }
+
+    private func addToFavorites(_ city: City) async {
         do {
             try await favoritesRepository.addCity(city)
             favoritesCities.insert(city)
@@ -81,8 +94,7 @@ import Foundation
         }
     }
 
-    @MainActor
-    func removeFromFavorites(_ city: City) async {
+    private func removeFromFavorites(_ city: City) async {
         do {
             try await favoritesRepository.removeCity(city)
             favoritesCities.remove(city)

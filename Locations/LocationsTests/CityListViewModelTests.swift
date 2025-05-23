@@ -322,7 +322,7 @@ final class CityListViewModelTests: XCTestCase {
         XCTAssertFalse(sut.isFavorite(city))
 
         // When
-        await sut.addToFavorites(city)
+        await sut.upsertFavorite(city)
 
         // Then
         XCTAssertTrue(sut.isFavorite(city))
@@ -343,7 +343,7 @@ final class CityListViewModelTests: XCTestCase {
         XCTAssertTrue(sut.isFavorite(city))
 
         // When
-        await sut.removeFromFavorites(city)
+        await sut.upsertFavorite(city)
 
         // Then
         XCTAssertFalse(sut.isFavorite(city))

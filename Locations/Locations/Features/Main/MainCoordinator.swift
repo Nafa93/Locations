@@ -16,8 +16,23 @@ final class MainCoordinator {
     }
 
     func start() {
-        let view = MainView()
+        let cityListViewModel = CityListViewModel(
+            cityRepository: LocalCityRepository(
+                searchableDataSet: TernarySearchTree()
+            ),
+            favoritesRepository: LocalFavoritesRepository(
+                coreDataPersistance: CoreDataPersistence()
+            )
+        )
+        let cityMapViewModel = CityMapViewModel()
+        let mainViewModel = MainViewModel(
+            cityListViewModel: cityListViewModel,
+            mapViewModel: cityMapViewModel
+        )
+
+        let view = MainView(viewModel: mainViewModel)
         let vc = UIHostingController(rootView: view)
+        // TODO: Hide navigation bar
         navigationController.pushViewController(vc, animated: true)
     }
 }

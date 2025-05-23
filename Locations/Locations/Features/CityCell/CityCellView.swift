@@ -20,7 +20,11 @@ struct CityCellView: View {
                 Text(viewModel.title)
                     .font(.subheadline)
 
-                Text(viewModel.subtitle)
+                Text(viewModel.latitudeSubtitle)
+                    .font(.footnote)
+                    .foregroundStyle(.black.opacity(0.5))
+
+                Text(viewModel.longitudeSubtitle)
                     .font(.footnote)
                     .foregroundStyle(.black.opacity(0.5))
             }
